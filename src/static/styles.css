@@ -28,6 +28,20 @@ header h1 {
   margin-bottom: 10px;
 }
 
+.teacher-controls {
+  max-width: 320px;
+  margin: 12px auto 0;
+  text-align: left;
+}
+
+.teacher-controls .form-group {
+  margin-top: 10px;
+}
+
+.teacher-controls button {
+  background-color: #3949ab;
+}
+
 main {
   display: flex;
   flex-wrap: wrap;
