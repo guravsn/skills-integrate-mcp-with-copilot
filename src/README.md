@@ -5,7 +5,7 @@ A super simple FastAPI application that allows students to view and sign up for 
 ## Features
 
 - View all available extracurricular activities
-- Sign up for activities
+- Teacher-only activity registration and removal
 
 ## Getting Started
 
@@ -15,11 +15,19 @@ A super simple FastAPI application that allows students to view and sign up for 
    pip install fastapi uvicorn
    ```
 
-2. Run the application:
+2. Configure teacher credentials in the server environment and start the app:
 
    ```
-   python app.py
+   export TEACHER_USERNAME=teacher
+   export TEACHER_PASSWORD='replace-with-a-strong-password'
+   uvicorn src.app:app --reload
    ```
+
+   Do not commit real credentials to the repository. The application does not
+   provide a default teacher account; management requests return an error until
+   both environment variables are configured. Serve the application over HTTPS
+   outside local development because teacher credentials use HTTP Basic
+   authentication.
 
 3. Open your browser and go to:
    - API documentation: http://localhost:8000/docs
@@ -30,7 +38,14 @@ A super simple FastAPI application that allows students to view and sign up for 
 | Method | Endpoint                                                          | Description                                                         |
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
 | GET    | `/activities`                                                     | Get all activities with their details and current participant count |
-| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| POST   | `/teacher/login`                                                  | Validate teacher credentials                                        |
+| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity (teacher authentication required)            |
+| DELETE | `/activities/{activity_name}/unregister?email=student@mergington.edu` | Remove a student (teacher authentication required)               |
+
+The web interface lets teachers log in and out. Teacher credentials are kept
+only in the browser's memory for the current page session and are sent to the
+server for each management request. Anyone can still view the activities and
+participants without logging in.
 
 ## Data Model
 
